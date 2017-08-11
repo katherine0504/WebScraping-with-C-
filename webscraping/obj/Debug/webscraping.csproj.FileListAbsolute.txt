@@ -1,0 +1,12 @@
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\webscraping.exe.config
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\webscraping.exe
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\webscraping.pdb
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.csprojResolveAssemblyReference.cache
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.Properties.Resources.resources
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.csproj.GenerateResource.Cache
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.exe
+c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.pdb
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.xml
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.Form1.resources

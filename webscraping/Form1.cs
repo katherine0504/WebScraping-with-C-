@@ -46,8 +46,6 @@ namespace webscraping {
             var contentNodes = doc.DocumentNode.SelectNodes("//*[@id=\"tableSort\"]//tr/td[3]");
             var refNodes = doc.DocumentNode.SelectNodes("//*[@id=\"tableSort\"]//tr//td[4]");
 
-            
-
             if (dateNodes == null || typeNodes == null || contentNodes == null) {
                 return new List<Resume>();
             }
@@ -87,17 +85,8 @@ namespace webscraping {
                 return new List<Product>();
             }
 
-            /*var innerCompany = companyName.Select(node => node.InnerText).ToString();
-            var innerShort = companyShort.Select(node => node.InnerText).ToList();
-            var innerFarmer = Farmer.Select(node => node.InnerText).ToList();
-            var innerProduct = productName.Select(node => node.InnerText).ToList();
-            var innerOrigin = origin.Select(node => node.InnerText).ToList();
-            var innerpackedDate = packedDate.Select(node => node.InnerText).ToList();
-            var innerVarified = varifiedCompany.Select(node => node.InnerText).ToList();*/
-
             List<Product> toReturn = new List<Product>();
-
-          
+   
             toReturn.Add(new Product() { Company = companyName, CompanyShort = companyShort, Farmer = Farmer, ProductName = productName, Origin = origin, PackedDate = packedDate, VarifiedCompany = varifiedCompany });
 
             return toReturn;

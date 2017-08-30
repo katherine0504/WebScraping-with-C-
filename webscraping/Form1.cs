@@ -78,9 +78,6 @@ namespace webscraping {
             var packedDate = doc.GetElementbyId("ctl00_ContentPlaceHolder1_PackDate").InnerText;
             var varifiedCompany = doc.GetElementbyId("ctl00_ContentPlaceHolder1_ao_name").InnerText;
 
-            Console.WriteLine("Company Name");
-            Console.WriteLine(companyName);
-
             if (companyName == null) {
                 return new List<Product>();
             }
@@ -92,8 +89,35 @@ namespace webscraping {
             return toReturn;
         }
 
+        private async Task<String> getFurtherInfo (string url, Recipe[] re)
+        {
+            var doc = await Task.Factory.StartNew(() => client.Load(url));
+            string toReturn = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_ProductName\"]/a").Attributes["href"].Value;
+
+            re[0].dishName = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[1]/p/a").InnerText.ToString();
+            re[0].dishPhoto = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[1]/div/a/img").Attributes["src"].Value;
+            re[0].dishUrl = "https://taft.coa.gov.tw" +  doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[1]/p/a").Attributes["href"].Value;
+
+            re[1].dishName = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[2]/p/a").InnerText.ToString();
+            re[1].dishPhoto = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[2]/div/a/img").Attributes["src"].Value;
+            re[1].dishUrl = "https://taft.coa.gov.tw" + doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[2]/p/a").Attributes["href"].Value;
+
+            re[2].dishName = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[3]/p/a").InnerText.ToString();
+            re[2].dishPhoto = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[3]/div/a/img").Attributes["src"].Value;
+            re[2].dishUrl = "https://taft.coa.gov.tw" + doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[3]/p/a").Attributes["href"].Value;
+
+            re[3].dishName = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[4]/p/a").InnerText.ToString();
+            re[3].dishPhoto = doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[4]/div/a/img").Attributes["src"].Value;
+            re[3].dishUrl = "https://taft.coa.gov.tw" + doc.DocumentNode.SelectSingleNode("//*[@id=\"ctl00_ContentPlaceHolder1_RecommandDIV\"]/div/ul/li[4]/p/a").Attributes["href"].Value;
+
+            return toReturn;
+        }
+
         private async void Form1_Load(object sender, EventArgs e) {
             string url = "https://taft.coa.gov.tw/rsm/Code_cp.aspx?ID=1527616&EnTraceCode=10608110970";
+
+            Recipe[] topRecipe = new Recipe[4];
+
             var productioninfos = await ProductionRecord(url);
 
             foreach (var info in productioninfos) {
@@ -105,6 +129,16 @@ namespace webscraping {
             foreach (var info in farmerinfos) {
                 table2.Rows.Add(info.Company, info.CompanyShort, info.Farmer, info.ProductName, info.Origin, info.PackedDate, info.VarifiedCompany); 
             }
+
+            var pedia = await getFurtherInfo(url, topRecipe);
+
+            for (int i = 0; i < 4; ++i) {
+                Console.WriteLine(topRecipe[i].dishName);
+                Console.WriteLine(topRecipe[i].dishPhoto);
+                Console.WriteLine(topRecipe[i].dishUrl);
+                Console.WriteLine("------------------");
+            }
+            
         }
     }
 }

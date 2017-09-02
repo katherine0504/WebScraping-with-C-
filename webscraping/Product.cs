@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace webscraping {
     struct Product {
-        public string Company;
         public string CompanyShort;
         public string Farmer;
         public string ProductName;

@@ -16,29 +16,9 @@ namespace webscraping {
 
         public Form1() {
             InitializeComponent();
-            InitTable();
         }
 
-        private void InitTable() {
-            table = new DataTable("Record");
-            table.Columns.Add("作業日期", typeof(string));
-            table.Columns.Add("作業種類", typeof(string));
-            table.Columns.Add("作業內容", typeof(string));
-            table.Columns.Add("備註說明", typeof(string));
-            dataGridView1.DataSource = table;
-
-            table2 = new DataTable("Product");
-            table2.Columns.Add("農產品經營業者", typeof(string));
-            table2.Columns.Add("簡稱", typeof(string));
-            table2.Columns.Add("生產者姓名", typeof(string));
-            table2.Columns.Add("產品名稱", typeof(string));
-            table2.Columns.Add("產地", typeof(string));
-            table2.Columns.Add("包裝日期", typeof(string));
-            table2.Columns.Add("驗證機構", typeof(string));
-            dataGridView2.DataSource = table2;
-        }
-
-        private async Task<List<Resume>> ProductionRecord ( string url ) {
+        private async Task<int> ProductionRecord (string url, Resume[] resume) {
             var doc = await Task.Factory.StartNew(() => client.Load(url));
  
             var dateNodes = doc.DocumentNode.SelectNodes("//*[@id=\"tableSort\"]//tr/td[1]");
@@ -47,7 +27,7 @@ namespace webscraping {
             var refNodes = doc.DocumentNode.SelectNodes("//*[@id=\"tableSort\"]//tr//td[4]");
 
             if (dateNodes == null || typeNodes == null || contentNodes == null) {
-                return new List<Resume>();
+                return -1;
             }
 
             var innerDate = dateNodes.Select(node => node.InnerText).ToList();
@@ -55,20 +35,21 @@ namespace webscraping {
             var innerContent = contentNodes.Select(node => node.InnerText).ToList();
             var innerRef = refNodes.Select(node => node.InnerText).ToList();
 
-            List<Resume> toReturn = new List<Resume>();
+            int cnt = innerDate.Count();
 
             for (int i = 0; i < innerDate.Count(); ++i) {
-                toReturn.Add(new Resume() { Date = innerDate[i], Type = innerTypes[i], Content = innerContent[i], Ref = innerRef[i] });
+                resume[i].Date = innerDate[i];
+                resume[i].Type = innerTypes[i];
+                resume[i].Content = innerContent[i];
+                resume[i].Ref = innerRef[i];
             }
 
-            return toReturn;
+            return cnt;
         }
 
-        private async Task<List<Product>> FarmRecord (string url)
+        private async Task<Boolean> FarmRecord (string url, Product[] pro)
         {
             var doc = await Task.Factory.StartNew(() => client.Load(url));
-            Console.WriteLine("DOC Name");
-            Console.WriteLine(doc);
 
             var companyName = doc.GetElementbyId("ctl00_ContentPlaceHolder1_Producer").InnerText;
             var companyShort = doc.GetElementbyId("ctl00_ContentPlaceHolder1_Producer").InnerText;
@@ -79,14 +60,18 @@ namespace webscraping {
             var varifiedCompany = doc.GetElementbyId("ctl00_ContentPlaceHolder1_ao_name").InnerText;
 
             if (companyName == null) {
-                return new List<Product>();
+                return false;
             }
 
-            List<Product> toReturn = new List<Product>();
-   
-            toReturn.Add(new Product() { Company = companyName, CompanyShort = companyShort, Farmer = Farmer, ProductName = productName, Origin = origin, PackedDate = packedDate, VarifiedCompany = varifiedCompany });
+            pro[0].Company = companyName;
+            pro[0].CompanyShort = companyShort;
+            pro[0].Farmer = Farmer;
+            pro[0].ProductName = productName;
+            pro[0].Origin = origin;
+            pro[0].PackedDate = packedDate;
+            pro[0].VarifiedCompany = varifiedCompany;
 
-            return toReturn;
+            return true;
         }
 
         private async Task<String> getFurtherInfo (string url, Recipe[] re)
@@ -117,17 +102,35 @@ namespace webscraping {
             string url = "https://taft.coa.gov.tw/rsm/Code_cp.aspx?ID=1527616&EnTraceCode=10608110970";
 
             Recipe[] topRecipe = new Recipe[4];
+            Product[] ProductInfo = new Product[1];
+            Resume[] ProductResume = new Resume[50];
 
-            var productioninfos = await ProductionRecord(url);
-
-            foreach (var info in productioninfos) {
-                table.Rows.Add(info.Date, info.Type, info.Content, info.Ref);
+            var resumecnt = await ProductionRecord(url, ProductResume);
+            
+            if (resumecnt != -1) {
+                for (int i = 0; i < resumecnt; ++i) {
+                    Console.WriteLine(ProductResume[i].Date);
+                    Console.WriteLine(ProductResume[i].Type);
+                    Console.WriteLine(ProductResume[i].Content);
+                    Console.WriteLine(ProductResume[i].Ref);
+                    Console.WriteLine("****************");
+                }
+            } else {
+                Console.WriteLine("Errors in parsing records");
             }
 
-            var farmerinfos = await FarmRecord(url);
+            var farmresults = await FarmRecord(url, ProductInfo);
 
-            foreach (var info in farmerinfos) {
-                table2.Rows.Add(info.Company, info.CompanyShort, info.Farmer, info.ProductName, info.Origin, info.PackedDate, info.VarifiedCompany); 
+            if (farmresults) {
+                Console.WriteLine(ProductInfo[0].Company);
+                Console.WriteLine(ProductInfo[0].CompanyShort);
+                Console.WriteLine(ProductInfo[0].Farmer);
+                Console.WriteLine(ProductInfo[0].Origin);
+                Console.WriteLine(ProductInfo[0].PackedDate);
+                Console.WriteLine(ProductInfo[0].ProductName);
+                Console.WriteLine(ProductInfo[0].VarifiedCompany);
+            } else {
+                Console.WriteLine("Errors in parsing farmresults");
             }
 
             var pedia = await getFurtherInfo(url, topRecipe);

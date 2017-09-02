@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace webscraping
 {
-    class Resume
+    struct Resume
     {
-        public string Date { get; set; }
-        public string Type { get; set; }
-        public string Content { get; set; }
-        public string Ref { get; set; }
+        public string Date;
+        public string Type;
+        public string Content;
+        public string Ref;
     }
 }

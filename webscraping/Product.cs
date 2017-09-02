@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace webscraping {
-    class Product {
-        public string Company { get; set; }
-        public string CompanyShort { get; set; }
-        public string Farmer { get; set; }
-        public string ProductName { get; set; }
-        public string Origin { get; set; }
-        public string PackedDate { get; set; }
-        public string VarifiedCompany { get; set; }
+    struct Product {
+        public string Company;
+        public string CompanyShort;
+        public string Farmer;
+        public string ProductName;
+        public string Origin;
+        public string PackedDate;
+        public string VarifiedCompany;
 
     }
 }

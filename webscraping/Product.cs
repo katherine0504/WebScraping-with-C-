@@ -12,6 +12,5 @@ namespace webscraping {
         public string Origin;
         public string PackedDate;
         public string VarifiedCompany;
-
     }
 }

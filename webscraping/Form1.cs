@@ -8,6 +8,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace MongoDBCreate
+{
+    public class ProductDB
+    {
+        [BsonId]
+        public ObjectId ID { get; set; }
+        public int op { get; set; }
+        public string Uriname { get; set; }
+        public string ProductName { get; set; }
+        public string CompanyShort { get; set; }
+        public string Farmer { get; set; }
+        public string Origin { get; set; }
+        public string PackedDate { get; set; }
+        public string VarifiedCompany { get; set; }
+        public string dishName1 { get; set; }
+        public string dishPhoto1 { get; set; }
+        public string dishUrl1 { get; set; }
+        public string dishName2 { get; set; }
+        public string dishPhoto2 { get; set; }
+        public string dishUrl2 { get; set; }
+        public string dishName3 { get; set; }
+        public string dishPhoto3 { get; set; }
+        public string dishUrl3 { get; set; }
+        public string dishName4 { get; set; }
+        public string dishPhoto4 { get; set; }
+        public string dishUrl4 { get; set; }
+    }
+}
 
 namespace webscraping {
     public partial class Form1 : Form {
@@ -114,11 +146,16 @@ namespace webscraping {
         }
 
         private async void Form1_Load(object sender, EventArgs e) {
-            string url = "https://taft.coa.gov.tw/rsm/Code_cp.aspx?ID=1558198&EnTraceCode=02136192760133";
+            string url = "https://taft.coa.gov.tw/rsm/Code_cp.aspx?ID=1561424&EnTraceCode=10609030565";
+            // MongoDB Setup
+            var connectionString = "mongodb://msp12:msp2017@ds123084.mlab.com:23084/msp";
+            var client = new MongoClient(connectionString);
+            var db = client.GetDatabase("msp");
+            IMongoCollection<MongoDBCreate.ProductDB> collection = db.GetCollection<MongoDBCreate.ProductDB>("productResume");
 
             Recipe[] topRecipe = new Recipe[4];
             Product[] ProductInfo = new Product[1];
-            Resume[] ProductResume = new Resume[50];
+            Resume[] ProductResume = new Resume[100];
 
             var resumecnt = await ProductionRecord(url, ProductResume);
             
@@ -167,6 +204,31 @@ namespace webscraping {
             } else {
                 Console.WriteLine("No URL found");
             }
+
+            //Decode picture and update url
+            var filter = Builders<MongoDBCreate.ProductDB>.Filter.Eq("op", 1);
+
+            var update = Builders<MongoDBCreate.ProductDB>.Update
+                .Set("Uriname", url).Set("ProductName", ProductInfo[0].ProductName)
+                .Set("CompanyShort", ProductInfo[0].CompanyShort).Set("Farmer", ProductInfo[0].Farmer)
+                .Set("Origin", ProductInfo[0].Origin).Set("PackedDate", ProductInfo[0].PackedDate)
+                .Set("dishName1", topRecipe[0].dishName)
+                .Set("dishPhoto1", topRecipe[0].dishPhoto)
+                .Set("dishUrl1", topRecipe[0].dishUrl)
+                .Set("dishName2", topRecipe[1].dishName)
+                .Set("dishPhoto2", topRecipe[1].dishPhoto)
+                .Set("dishUrl2", topRecipe[1].dishUrl)
+                .Set("dishName3", topRecipe[2].dishName)
+                .Set("dishPhoto3", topRecipe[2].dishPhoto)
+                .Set("dishUrl3", topRecipe[2].dishUrl)
+                .Set("dishName4", topRecipe[3].dishName)
+                .Set("dishPhoto4", topRecipe[3].dishPhoto)
+                .Set("dishUrl4", topRecipe[3].dishUrl);
+
+            var result = await collection.UpdateOneAsync(filter, update);
+
+            //find last decoded url
+            var user = collection.Find(r => r.op == 1).Limit(1).ToList();
         }
     }
 }

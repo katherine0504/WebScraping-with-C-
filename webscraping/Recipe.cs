@@ -11,5 +11,5 @@ namespace webscraping
         public string dishName;
         public string dishPhoto;
         public string dishUrl;
-    }
+    } 
 }

@@ -9,4 +9,13 @@ c:\users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj
 C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.dll
 C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\HtmlAgilityPack.xml
-C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\webscraping.Form1.resources
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Bson.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.Core.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.Legacy.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Bson.xml
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.xml
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.Core.xml
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\bin\Debug\MongoDB.Driver.Legacy.xml
+C:\Users\kathe\documents\visual studio 2017\Projects\webscraping\webscraping\obj\Debug\MongoDBCreate.ProductDB.resources
